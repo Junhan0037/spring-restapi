@@ -1,7 +1,7 @@
 package com.example.springrestapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,9 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +30,17 @@ public class EventControllerTests {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    private WebApplicationContext ctx;
+
+    @Before
+    public void setup() { // 한글 깨짐 방지
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
+                .build();
+    }
 
     @Test
     @DisplayName("정상적으로 이벤트를 생성하는 테스트")
@@ -45,17 +59,20 @@ public class EventControllerTests {
                 .build();
 
         mockMvc.perform(post("/api/events/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaTypes.HAL_JSON)
-                    .content(objectMapper.writeValueAsString(event)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
                 .andExpect(status().isCreated()) // 201
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE+";charset=UTF-8"))
                 .andExpect(jsonPath("free").value(false))
                 .andExpect(jsonPath("offline").value(true))
-                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.query-events").exists())
+                .andExpect(jsonPath("_links.update-events").exists());
     }
 
     @Test
@@ -79,9 +96,9 @@ public class EventControllerTests {
                 .build();
 
         mockMvc.perform(post("/api/events/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaTypes.HAL_JSON)
-                    .content(objectMapper.writeValueAsString(event)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -92,8 +109,8 @@ public class EventControllerTests {
         EventDto eventDto = EventDto.builder().build();
 
         mockMvc.perform(post("/api/events")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(eventDto)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(eventDto)))
                 .andExpect(status().isBadRequest());
     }
 
