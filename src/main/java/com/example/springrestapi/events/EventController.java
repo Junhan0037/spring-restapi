@@ -47,7 +47,7 @@ public class EventController {
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
         eventResource.add(selfLinkBuilder.withRel("update-events"));
 
-//        // EventResource 객체를 생성하지 않고 처리하는 법
+        // EventResource 객체를 생성하지 않고 처리하는 법
 //        EntityModel eventResource = EntityModel.of(newEvent);
 //        eventResource.add(selfLinkBuilder.withSelfRel());
 //        eventResource.add(linkTo(EventController.class).withRel("query-events"));
