@@ -2,6 +2,7 @@ package com.example.springrestapi.events;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,7 @@ public class EventController {
         EventResource eventResource = new EventResource(newEvent);
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
         eventResource.add(selfLinkBuilder.withRel("update-events"));
+        eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
 
         // EventResource 객체를 생성하지 않고 처리하는 법
 //        EntityModel eventResource = EntityModel.of(newEvent);
