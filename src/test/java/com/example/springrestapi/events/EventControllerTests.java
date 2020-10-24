@@ -20,12 +20,14 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,6 +44,9 @@ public class EventControllerTests {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    EventRepository eventRepository;
 
     @Autowired
     private WebApplicationContext ctx;
@@ -70,10 +75,11 @@ public class EventControllerTests {
                 .location("D2 스타트업 팩토리")
                 .build();
 
-        mockMvc.perform(post("/api/events/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(event)))
+        this.mockMvc.perform(post("/api/events/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaTypes.HAL_JSON)
+                    .content(objectMapper.writeValueAsString(event))
+                )
                 .andDo(print())
                 .andExpect(status().isCreated()) // 201
                 .andExpect(jsonPath("id").exists())
@@ -156,10 +162,11 @@ public class EventControllerTests {
                 .eventStatus(EventStatus.PUBLISHED) // 무시 해야 하는 값
                 .build();
 
-        mockMvc.perform(post("/api/events/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(event)))
+        this.mockMvc.perform(post("/api/events/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaTypes.HAL_JSON)
+                    .content(objectMapper.writeValueAsString(event))
+                )
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -169,9 +176,10 @@ public class EventControllerTests {
     public void createEvent_Bad_Request_Empty_Input() throws Exception {
         EventDto eventDto = EventDto.builder().build();
 
-        mockMvc.perform(post("/api/events")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(eventDto)))
+        this.mockMvc.perform(post("/api/events")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(eventDto))
+                )
                 .andExpect(status().isBadRequest());
     }
 
@@ -191,15 +199,45 @@ public class EventControllerTests {
                 .location("D2 스타트업 팩토리")
                 .build();
 
-        mockMvc.perform(post("/api/events")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(eventDto)))
+        this.mockMvc.perform(post("/api/events")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(eventDto))
+                )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors[0].objectName").exists())
                 .andExpect(jsonPath("errors[0].defaultMessage").exists())
                 .andExpect(jsonPath("errors[0].code").exists())
                 .andExpect(jsonPath("_links.index").exists());
+    }
+
+    @Test
+    @DisplayName("30개의 이벤트를 10개씩 두번째 페이지 조회하기")
+    public void queryEvents() throws Exception {
+        //given
+        IntStream.range(0, 30).forEach(this::generateEvent);
+
+        //when
+        this.mockMvc.perform(get("/api/events")
+                    .param("page", "1")
+                    .param("size", "10")
+                    .param("sort", "name,DESC")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("page").exists())
+                .andExpect(jsonPath("_embedded.eventList[0]._links.self").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                .andDo(document("query-document"));
+    }
+
+    private void generateEvent(int index) {
+        Event event = Event.builder()
+                .name("event" + index)
+                .description("test event")
+                .build();
+        this.eventRepository.save(event);
     }
 
 }
