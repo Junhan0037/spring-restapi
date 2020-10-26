@@ -41,5 +41,8 @@
 ## 학습 목차
 
 #### 1. [REST API](https://www.notion.so/REST-API-ee7b06bba2464fce8ff55bd042060d24)
+#### 2. [REST API 및 프로젝트 소개](https://github.com/Junhan0037/spring-restapi/pull/1)
+#### 3. [이벤트 생성 및 API 개발](https://github.com/Junhan0037/spring-restapi/pull/2)
+#### 4. [HATEOAS와 Self-Describtive Message 적용](https://github.com/Junhan0037/spring-restapi/pull/3)
 
 해당 repo는 [스프링 기반 REST API 개발 - 백기선](https://www.inflearn.com/course/spring_rest-api) 해당 강의를 듣고 정리한 REPO 입니다.
