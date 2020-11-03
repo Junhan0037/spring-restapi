@@ -4,6 +4,7 @@ import com.example.springrestapi.accounts.Account;
 import com.example.springrestapi.accounts.AccountRepository;
 import com.example.springrestapi.accounts.AccountRole;
 import com.example.springrestapi.accounts.AccountService;
+import com.example.springrestapi.common.AppProperties;
 import com.example.springrestapi.common.BaseControllerTest;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +47,9 @@ public class EventControllerTests extends BaseControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AppProperties appProperties;
 
     @Before
     public void UTF8() { // 한글 깨짐 방지
@@ -151,22 +155,17 @@ public class EventControllerTests extends BaseControllerTest {
 
     private String getAccessToken() throws Exception {
         // Given
-        String username = "app@email.com";
-        String password = "app";
         Account junhan = Account.builder()
-                .email(username)
-                .password(password)
+                .email(appProperties.getUserUsername())
+                .password(appProperties.getUserPassword())
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
         this.accountService.saveAccount(junhan);
 
-        String clientId = "myApp";
-        String clientSecret = "pass";
-
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserUsername())
+                .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password"));
 
         var responseBody = perform.andReturn().getResponse().getContentAsString();
