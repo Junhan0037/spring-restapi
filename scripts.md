@@ -8,7 +8,6 @@ Here, I memo scripts that I have used during development.
 
 ```
 docker run --name spring-restapi -p 5432:5432 -e POSTGRES_PASSWORD=pass -d postgres
-
 ```
 
 This cmdlet will create Postgres instance so that you can connect to a database with:
