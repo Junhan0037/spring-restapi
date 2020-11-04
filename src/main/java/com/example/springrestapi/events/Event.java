@@ -1,5 +1,8 @@
 package com.example.springrestapi.events;
 
+import com.example.springrestapi.accounts.Account;
+import com.example.springrestapi.accounts.AccountSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +29,9 @@ public class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
+    @ManyToOne
+    @JsonSerialize(using = AccountSerializer.class)
+    private Account manager;
 
     public void update() {
         if (this.basePrice == 0 && this.maxPrice == 0) {
