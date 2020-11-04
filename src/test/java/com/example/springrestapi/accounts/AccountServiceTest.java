@@ -12,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -47,12 +46,7 @@ class AccountServiceTest {
 
     @Test
     public void findByUsernameFail() {
-        String username = "random@email.com";
-        Exception expectedException = assertThrows(
-                UsernameNotFoundException.class, () -> accountService.loadUserByUsername(username)
-        );
-
-        assertEquals(username, expectedException.getMessage());
+        assertThrows(UsernameNotFoundException.class, () -> accountService.loadUserByUsername( "random@email.com"));
     }
 
 }
