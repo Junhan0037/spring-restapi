@@ -19,8 +19,6 @@
 
 프로젝트 개발 환경은 다음과 같습니다.
 
-* IDE : IntelliJ IDEA Ultimate
-* OS : Windows10
 * Java11
 * Maven
 * Spring Boot
@@ -48,3 +46,7 @@
 #### 6. [REST API 보안 적용](https://github.com/Junhan0037/spring-restapi/pull/5)
 
 해당 repo는 [스프링 기반 REST API 개발 - 백기선](https://www.inflearn.com/course/spring_rest-api) 해당 강의를 듣고 정리한 REPO 입니다.
+
+## 결과
+
+<img src="src/main/resources/static/images/result.gif" width="800px" height="501px" title="결과" alt="result"></img><br/>
