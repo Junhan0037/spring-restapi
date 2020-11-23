@@ -46,4 +46,5 @@ public class Event {
             this.offline = true;
         }
     }
+
 }

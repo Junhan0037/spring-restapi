@@ -85,10 +85,10 @@ public class EventControllerTest extends BaseTest {
                     .header(HttpHeaders.AUTHORIZATION, getBearerToken(true))
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaTypes.HAL_JSON)
-                    .content(objectMapper.writeValueAsString(event))
+                    .content(objectMapper.writeValueAsString(event)) // objectMapper : 객체를 JSON으로 변환
                 )
                 .andDo(print())
-                .andExpect(status().isCreated()) // 201
+                .andExpect(status().isCreated()) // 입력값들을 전달하면 JSON 응답으로 201이 나오는지 확인
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE+";charset=UTF-8"))
