@@ -13,8 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
+@AutoConfigureRestDocs // Spring Docs
+@Import(RestDocsConfiguration.class) // RestDocs 커스터마이징
 @ActiveProfiles("test")
 @Disabled
 public class BaseTest {

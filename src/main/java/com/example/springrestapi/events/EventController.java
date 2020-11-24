@@ -48,7 +48,7 @@ public class EventController {
         event.setManager(currentUser);
         Event newEvent = this.eventRepository.save(event);
 
-        WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId()); // "/api/events/{id}"
         URI createdUri = selfLinkBuilder.toUri();
 
         EventResource eventResource = new EventResource(newEvent);
@@ -121,7 +121,7 @@ public class EventController {
     }
 
     private ResponseEntity badRequest(Errors errors) {
-        return ResponseEntity.badRequest().body(new ErrorsResource(errors));
+        return ResponseEntity.badRequest().body(new ErrorsResource(errors)); // Errors Serializer
     }
 
 }

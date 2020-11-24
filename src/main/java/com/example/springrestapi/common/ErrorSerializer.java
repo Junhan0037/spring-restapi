@@ -9,12 +9,13 @@ import org.springframework.validation.Errors;
 import java.io.IOException;
 
 @JsonComponent
-public class ErrorSerializer extends JsonSerializer<Errors> {
+public class ErrorSerializer extends JsonSerializer<Errors> { // Errors Serializer
 
     @Override
     public void serialize(Errors errors, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeFieldName("errors");
         jsonGenerator.writeStartArray();
+
         errors.getFieldErrors().forEach(e -> {
             try {
                 jsonGenerator.writeStartObject();
@@ -43,6 +44,7 @@ public class ErrorSerializer extends JsonSerializer<Errors> {
                 ioException.printStackTrace();
             }
         });
+
         jsonGenerator.writeEndArray();
     }
 

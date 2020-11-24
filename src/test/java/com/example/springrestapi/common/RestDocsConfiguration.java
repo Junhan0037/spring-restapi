@@ -8,7 +8,7 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentationConfigurer;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 @TestConfiguration
-public class RestDocsConfiguration {
+public class RestDocsConfiguration { // RestDocs 커스터마이징
 
     @Bean
     public RestDocsMockMvcConfigurationCustomizer restDocsMockMvcConfigurationCustomizer() {

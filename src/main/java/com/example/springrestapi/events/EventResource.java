@@ -5,7 +5,7 @@ import org.springframework.hateoas.Link;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
-public class EventResource extends EntityModel<Event> {
+public class EventResource extends EntityModel<Event> { // Spring HATEOAS
 
     public EventResource(Event event, Link... links) {
         super(event, links);

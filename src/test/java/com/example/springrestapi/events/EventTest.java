@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(JUnitParamsRunner.class)
+@RunWith(JUnitParamsRunner.class) // 매개변수를 이용한 테스트
 class EventTest {
 
     @Test
@@ -39,7 +39,7 @@ class EventTest {
         assertThat(event.getDescription()).isEqualTo(description);
     }
 
-    @ParameterizedTest
+    @ParameterizedTest // 매개변수를 이용한 테스트
     @MethodSource("parametersForTestFree")
     public void testFree(int basePrice, int maxPrice, boolean isFree) {
         // given
