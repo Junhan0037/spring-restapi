@@ -46,7 +46,7 @@ class AccountServiceTest {
 
     @Test
     public void findByUsernameFail() {
-        assertThrows(UsernameNotFoundException.class, () -> accountService.loadUserByUsername( "random@email.com"));
+        assertThrows(UsernameNotFoundException.class, () -> accountService.loadUserByUsername("random@email.com"));
     }
 
 }
