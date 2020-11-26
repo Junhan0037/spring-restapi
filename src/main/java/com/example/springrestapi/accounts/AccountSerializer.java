@@ -11,7 +11,7 @@ public class AccountSerializer extends JsonSerializer<Account> {
     @Override
     public void serialize(Account account, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeNumberField("id", account.getId());
+        jsonGenerator.writeNumberField("id", account.getId()); // Account의 id만 Body에 담기도록 한다
         jsonGenerator.writeEndObject();
     }
 

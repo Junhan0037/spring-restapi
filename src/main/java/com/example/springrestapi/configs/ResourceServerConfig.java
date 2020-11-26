@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter { // 리소스 서버 설정
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {

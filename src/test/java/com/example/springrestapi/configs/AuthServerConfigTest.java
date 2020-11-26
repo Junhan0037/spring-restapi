@@ -28,7 +28,8 @@ class AuthServerConfigTest extends BaseTest {
                     .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
                     .param("username", appProperties.getUserUsername())
                     .param("password", appProperties.getUserPassword())
-                    .param("grant_type", "password"))
+                    .param("grant_type", "password")
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("access_token").exists());

@@ -29,20 +29,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception { // authenticationManager를 Bean으로 노출
         return super.authenticationManagerBean();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception { // AuthenticationManagerBuilder 구성
         auth.userDetailsService(accountService)
                 .passwordEncoder(passwordEncoder);
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) throws Exception { // SecurityFilter
         web.ignoring().mvcMatchers("/docs/index.html");
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // StaticResource 예외처리
     }
 
 }

@@ -30,7 +30,7 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
     @ManyToOne
-    @JsonSerialize(using = AccountSerializer.class)
+    @JsonSerialize(using = AccountSerializer.class) // Serializer 적용
     private Account manager;
 
     public void update() {
